@@ -1,0 +1,11 @@
+task :default => :test
+
+desc "Ejecutar programa radio"
+task :radio do
+	sh "ruby -I. lib/radio.rb"
+end
+
+desc "Ejecutar el test"
+task :test do
+	sh "ruby -I. test/test.rb"
+end	

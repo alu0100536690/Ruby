@@ -1,0 +1,4 @@
+require "Fracciones"
+
+fraccion = Fracciones.new(15,5)
+puts fraccion.gcd()

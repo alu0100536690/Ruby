@@ -1,0 +1,5 @@
+rspec -Ilib spec/ppt_spec.rb
+rspec --help
+
+#ejecución del programa normal
+ruby -Ilib bin/Fracciones_bin.rb

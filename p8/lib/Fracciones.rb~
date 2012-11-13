@@ -1,0 +1,22 @@
+class Fracciones
+	attr_accessor :numerador, :denominador
+	def initialize(num, den)
+        	@numerador = num
+		@denominador = den
+        end 	
+
+	def forma_reducida()
+			
+	end
+	def gcd
+  		if(@denominador > 0)
+    			return gcd(@denominador, @numerador % @denominador)
+  		elsif(u < 0) 
+			return -@numerador
+		else 
+		        return @numerador
+		end
+	end
+end
+
+

@@ -1,0 +1,41 @@
+class RockPaperScissors
+	def player 
+	  :piedra
+	end
+	
+	def computer
+	    :papel
+	end
+	
+	def tiradas 
+	  [:piedra, :papel, :tijeras]
+	end
+	
+	def ganadoras
+	   {:piedra => :tijeras,
+	    :papel => :piedra,
+	    :tijeras => :papel}
+	end
+	
+	def player_throw
+	  if tiradas.include?player
+	    return player
+	  end
+	end
+	
+	def computer_throw
+	    if tiradas.include?computer
+	      return computer
+	    end
+	end
+	
+	def lista_resultados
+	  
+	end
+	
+	def resultados
+	  if player == ganadoras[computer]
+	    return computer
+	  end
+	end
+end

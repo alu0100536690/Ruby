@@ -1,0 +1,141 @@
+--global (para todos los proyectos en esa máquina)
+alu4109@cc193:~$ git config --global user.name "freinn"
+alu4109@cc193:~$ git config --global --list
+alu4109@cc193:~$ git config --global user.email "freinn@gmail.com"
+los cambios se guardarán las claves privadas en el directorio .shh de nuestro /home
+es mejor poner los permisos chmod 700 .ssh/
+clave pública la puede tener cualquiera, privada no
+
+##creamos clave pública en .ssh NO como root, sino como freinn
+
+[freinn@freinn-pc .ssh]$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/freinn/.ssh/id_rsa): github
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in github.
+Your public key has been saved in github.pub.
+The key fingerprint is:
+a9:62:4d:91:df:cc:ff:ff:82:ac:66:12:d9:0c:67:8f freinn@freinn-pc
+The key's randomart image is:
++--[ RSA 2048]----+
+|                 |
+|       .         |
+|      o          |
+|       o.=o      |
+|      . SB+o     |
+|     o .o E..    |
+|    o o  . ...   |
+|   . .  . o o..  |
+|         +..  .o+|
++-----------------+
+[freinn@freinn-pc .ssh]$ ls
+github  github.pub  known_hosts
+[freinn@freinn-pc .ssh]$ ls
+github  github.pub  known_hosts
+[freinn@freinn-pc .ssh]$ cat github.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjPPwVcD4p4AadAjUaCfBxWX3mUDzfNTXbVo/qbGY+N9b09xbn9y42CrjdDb09KVRSslRlnEM3Vc55Ik4ILYlXM8BNhjEWJo7GLl5Qm37RbsTfY9jTgWFluiJncW2wpIGD1kl4QPo98qLMQNmDWwIE+JzTX2+7sos8VpDUiuX6pNoc9YTpKdSnjOoNQXG6CUs0JqkeBEbeTSqf/dYkO0Av0Bud5HwVmd9fhmW/B31iRyK6V4rlc2eyZeReivmv9iT4emfZuHRgY7ty8iT4hitrysxsDoaAHrotYhN6BOILdwibmZZdvj+GgKvOo7pSubzy7JCVRtxMGL920oVwf+OB freinn@freinn-pc
+
+##la copiamos y pegamos en github al completo
+
+##creamos el fichero config y lee damos permisos 700 igual que al directorio .ssh
+
+[freinn@freinn-pc ~]$ chmod 700 .ssh 
+[freinn@freinn-pc .ssh]$ chmod 700 config 
+
+[freinn@freinn-pc .ssh]$ geany config
+[freinn@freinn-pc .ssh]$ cat config 
+Host github.com git
+HostName github.com
+user git
+IdentityFile /home/freinn/.ssh/github
+
+Host github.com git 
+HostName github.com
+user git
+IdentityFile /home/freinn/.ssh/github
+
+## ya podemos usar git en esta máquina con github
+
+#BORRAR un fichero manejado por add:
+lo borramos del directorio real y luego,
+git commit -a -m "File nonsense.txt is now removed"
+
+We will now create a remote Git repository. Git allows you to store this remote repository either on the network or locally.
+A standard Git repository is different from a remote Git repository. A standard Git repository contains the source code and the Git repository. You can work directly in this directory as the repository contains a working copy of all files.
+Remote repositories do not contain working copies of the files. They only contain repository files. To create such a repository, set the --bare flag.
+
+#nos posicionamos en el repositorio que queremos "copiar"
+git clone --bare . ../remote-repository.git
+
+#guardo todos los cambios del dir actual en el otro repo
+git push ../remote-repository.git 
+
+#añadir origin para hacer el push a origin y no al nombre real
+git remote add origin ../remote-repository.git
+
+git push origin #haría el push hacia ../remote-repository.git
+
+#origin por defecto indica el repositorio en el que empezamos
+
+#mostrar los repositorios remotos definidos
+git remote
+
+#he creado el repositorio remoto Ruby en https://github.com/freinn/Ruby.git
+git remote add Ruby https://github.com/freinn/Ruby.git
+
+[freinn@freinn ruby]$ git push Ruby master
+Username for 'https://github.com': freinn
+Password for 'https://freinn@github.com': 
+To https://github.com/freinn/Ruby.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'https://github.com/freinn/Ruby.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+[freinn@freinn ruby]$ git pull --rebase Ruby master
+From https://github.com/freinn/Ruby
+ * branch            master     -> FETCH_HEAD
+First, rewinding head to replay your work on top of it...
+Applying: Initial commit
+Applying: borrado hi.rb
+Applying: ponemos de nuevo hi.rb
+Applying: 1 cambio en 1 archivo
+
+#SI ESTO FALLA, PORQUE HAY ARCHIVOS BORRADOS QUE GIT NO CONTROLA, HACER:
+git rm --cached ruby.rb #para el archivo que hemos borrado si es ruby.rb
+
+#llevar los cambios de la rama master a Ruby(repositorio en Github)
+[freinn@freinn ruby]$ git push Ruby master
+Username for 'https://github.com': freinn
+Password for 'https://freinn@github.com': 
+Counting objects: 15, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (14/14), 3.71 KiB, done.
+Total 14 (delta 5), reused 0 (delta 0)
+To https://github.com/freinn/Ruby.git
+   fbf2304..399ce91  master -> master
+
+#BORRAR ALGO DE GITHUB
+#borramos fichero en el dir local
+[freinn@freinn texto]$ rm comandos\ config\ git.txt 
+
+[freinn@freinn texto]$ git commit -a -m "borrado el ficheros comandos config git.txt"
+[master c809e13] borrado el ficheros comandos config git.txt
+ 1 file changed, 87 deletions(-)
+ delete mode 100644 comandos config git.txt
+
+[freinn@freinn texto]$ git push Ruby master 
+
+#merge recibe una rama como parámetro, mezclará esa con la ACTUAL(en uso), a la que hicimos checkout o master (por defecto)
+
+#IMPRESIONANTE: DEJA EL REPOSITORIO REMOTO SÓLO CON LO QUE CONTIENE MASTER!!!!
+#creamos primero un nuevo repo con SÓLO lo que queríamos dejar en origin y luego hacer el comando:
+git push -u --force origin master
+
+
+
+

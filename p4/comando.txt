@@ -1,0 +1,2 @@
+Está preparado para sólo tener que hacer:
+> rake test

@@ -1,0 +1,2 @@
+rspec -Ilib -Itest spec/prueba_spec.rb
+rspec --help
